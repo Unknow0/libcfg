@@ -40,17 +40,11 @@ void merge(json_object *dest, json_object *src)
 			merge(o, val);
 		}
 	}
-int cfg_loaded(const char *file)
-	{
-	json_object *loaded=json_object_object_get(cfg, ".loaded");
-	return json_object_object_get(loaded, file)!=NULL;
-	}
 
 int cfg_aggregate_file(const char *file, char *key, json_object *base)
 	{
 	int f;
 	json_object *o;
-	json_object *loaded;
 	ssize_t s;
 	json_tokener *tok=json_tokener_new();
 	char buf[BUF_SIZE];
@@ -69,8 +63,6 @@ int cfg_aggregate_file(const char *file, char *key, json_object *base)
 	while(s>0);
 	if(s<0)
 		return 3;
-	loaded=json_object_object_get(cfg, ".loaded");
-	json_object_object_add(loaded, file, json_object_new_boolean(0));
 
 	if(base==NULL)
 		base=cfg;
@@ -144,7 +136,6 @@ int cfg_init()
 	{
 	char *home, *s;
 	cfg=json_object_new_object();
-	json_object_object_add(cfg, ".loaded", json_object_new_object());
 	cfg_aggregate_file("/etc/cfg", NULL, cfg);
 	cfg_aggregate_dir("/etc/cfg.d/");
 
@@ -166,13 +157,17 @@ json_object *cfg_get(char *key)
 
 	do
 		{
+		char b;
 		while(*(c+end)!=0 && *(c+end)!='.')
 			end++;
+		b=c[end];
+		c[end]=0;
 		o=json_object_object_get(o, c);
+		c[end]=b;
 		c+=end+1;
 		end=0;
 		}
-	while (o!=NULL && *c!=0);
+	while (o!=NULL && *(c-1)!=0);
 	free(dup);
 	return o;
 	}
