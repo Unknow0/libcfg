@@ -13,6 +13,7 @@ all: build test
 build: $(PROG).a $(PROG).so
 
 $(PROG).a: $(OBJECTS)
+	rm $(PROG).a
 	ar rcs $(PROG).a $^
 $(PROG).so: $(OBJECTS)
 	$(CC) -shared -o $(PROG).so $^

@@ -34,7 +34,7 @@ void merge(json_object *dest, json_object *src)
 	json_object_object_foreach(src, key, val)
 		{
 		json_object *o=json_object_object_get(dest, key);
-		if(o!=NULL || !json_object_is_type(val, json_type_object) || !json_object_is_type(o, json_type_object))
+		if(o==NULL || !json_object_is_type(val, json_type_object) || !json_object_is_type(o, json_type_object))
 			json_object_object_add(dest, key, val);
 		else
 			merge(o, val);
@@ -63,8 +63,8 @@ int cfg_aggregate_file(const char *file, char *key, json_object *base)
 	while(s>0);
 	if(s<0)
 		return 3;
-	if(o==NULL)
-		return 3;
+	if(o==NULL) // TODO return json error?
+		return 4;
 
 	if(base==NULL)
 		base=cfg;
