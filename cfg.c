@@ -63,6 +63,8 @@ int cfg_aggregate_file(const char *file, char *key, json_object *base)
 	while(s>0);
 	if(s<0)
 		return 3;
+	if(o==NULL)
+		return 3;
 
 	if(base==NULL)
 		base=cfg;
