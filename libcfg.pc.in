@@ -6,6 +6,6 @@ includedir=@includedir@
 Name: libcfg
 Description: Configuration library
 Version: @VERSION@
-Requires: json-c libcontainer
+Requires: json-c container
 Libs: -L${libdir} -lcfg
 Cflags: -I${includedir}
