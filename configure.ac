@@ -15,7 +15,7 @@ AC_PROG_INSTALL
 
 # Checks for libraries.
 AC_CHECK_LIB([container], [chunked_list_create], [], [
-	AC_MSG_ERROR([install libcontainer: https://github.com/Unknow0/libcontainer])
+	AC_MSG_ERROR([install container: https://github.com/Unknow0/libcontainer])
 	])
 AC_CHECK_LIB([json-c], [json_object_new_object], [], [
 	AC_MSG_ERROR([install json-c: https://github.com/json-c/json-c])
