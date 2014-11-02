@@ -22,8 +22,9 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <dirent.h>
+#include <stdlib.h>
 
-#include <json-c/json.h>
+#include "cfg.h"
 
 #define BUF_SIZE 1024
 
@@ -141,7 +142,7 @@ int cfg_init()
 	cfg_aggregate_file("/etc/cfg", NULL, cfg);
 	cfg_aggregate_dir("/etc/cfg.d/");
 
-	home=__secure_getenv("HOME");
+	home=secure_getenv("HOME");
 	s=malloc(strlen(home)+12);
 	strcpy(s, home);
 	strcat(s, "/.config/cfg");

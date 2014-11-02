@@ -18,7 +18,7 @@
 #ifndef _CFG_H
 #define _CFG_H
 
-#include <json/json.h>
+#include <json-c/json.h>
 
 /** init default configuration by loading file /etc/cfg and ~/.config/cfg  and all *.cfg under /etc/cfg.d/ */
 int cfg_init();
@@ -26,7 +26,7 @@ int cfg_init();
 /** return NULL if we can't find a key */
 json_object *cfg_get(char *key);
 
-char *cfg_get_string(char *key);
+const char *cfg_get_string(char *key);
 
 /** return 0 if doesn't exist and 0 + errno = EINVAL if it's not a int */
 int64_t cfg_get_int(char *key);
