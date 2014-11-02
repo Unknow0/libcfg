@@ -23,7 +23,7 @@
 #include <fcntl.h>
 #include <dirent.h>
 
-#include <json/json.h>
+#include <json-c/json.h>
 
 #define BUF_SIZE 1024
 
