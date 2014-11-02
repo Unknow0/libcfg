@@ -29,8 +29,6 @@ AC_TYPE_INT64_T
 AC_TYPE_SSIZE_T
 
 # Checks for library functions.
-AC_FUNC_MALLOC
-AC_FUNC_REALLOC
 AC_CHECK_FUNCS([strdup])
 
 AC_CONFIG_FILES([
