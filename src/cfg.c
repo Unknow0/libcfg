@@ -62,6 +62,7 @@ int cfg_aggregate_file(const char *file, char *key, json_object *base)
 			o=json_tokener_parse_ex(tok, buf, s);
 		}
 	while(s>0);
+	close(f);
 	if(s<0)
 		return 3;
 	if(o==NULL) // TODO return json error?
@@ -142,11 +143,15 @@ int cfg_init()
 	cfg_aggregate_file("/etc/cfg", NULL, cfg);
 	cfg_aggregate_dir("/etc/cfg.d/");
 
-	home=secure_getenv("HOME");
-	s=malloc(strlen(home)+12);
-	strcpy(s, home);
-	strcat(s, "/.config/cfg");
-	cfg_aggregate_file(s, NULL, cfg);
+	home=getenv("HOME");
+	if(home!=NULL)
+		{
+		s=malloc(strlen(home)+12);
+		strcpy(s, home);
+		strcat(s, "/.config/cfg");
+		cfg_aggregate_file(s, NULL, cfg);
+		free(s);
+		}
 
 	return 0;
 	} 
