@@ -146,7 +146,7 @@ int cfg_init()
 	home=getenv("HOME");
 	if(home!=NULL)
 		{
-		s=malloc(strlen(home)+12);
+		s=malloc(strlen(home)+13);
 		strcpy(s, home);
 		strcat(s, "/.config/cfg");
 		cfg_aggregate_file(s, NULL, cfg);
