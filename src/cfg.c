@@ -34,7 +34,8 @@ void merge(json_object *dest, json_object *src)
 	{
 	json_object_object_foreach(src, key, val)
 		{
-		json_object *o=json_object_object_get(dest, key);
+		json_object *o=NULL;
+		json_object_object_get_ex(dest, key, &o);
 		if(o==NULL || !json_object_is_type(val, json_type_object) || !json_object_is_type(o, json_type_object))
 			json_object_object_add(dest, key, val);
 		else
@@ -48,6 +49,7 @@ int cfg_aggregate_file(const char *file, char *key, json_object *base)
 	json_object *o;
 	ssize_t s;
 	json_tokener *tok;
+	enum json_tokener_error jerr;
 	char buf[BUF_SIZE];
 	if(file==NULL)
 		return 1;
@@ -62,19 +64,26 @@ int cfg_aggregate_file(const char *file, char *key, json_object *base)
 		if(s>0)
 			o=json_tokener_parse_ex(tok, buf, s);
 		}
-	while(s>0);
+	while(s>0 && (jerr = json_tokener_get_error(tok)) == json_tokener_continue);
 	close(f);
 	json_tokener_free(tok);
 	if(s<0)
+		{
+		json_object_object_delete(o);
 		return 3;
-	if(o==NULL) // TODO return json error?
+		}
+	if(jerr != json_tokener_success) // TODO return json error?
+		{
+		json_object_object_delete(o);
 		return 4;
+		}
 
 	if(base==NULL)
 		base=cfg;
 	if(key!=NULL)
 		{
-		json_object *jo=json_object_object_get(base, key);
+		json_object *jo=NULL;
+		json_object_object_get_ex(base, key, &jo);
 		if(jo==NULL)
 			{
 			jo=json_object_new_object();
@@ -112,7 +121,8 @@ void _cfg_aggregate_dir(char **name, int len, int *alloc, json_object *obj)
 		strcat(*name, d->d_name);
 		if(d->d_type==DT_DIR)
 			{
-			json_object *o=json_object_object_get(obj, d->d_name);
+			json_object *o=NULL;
+			json_object_object_get_ex(obj, d->d_name, &o);
 			if(o==NULL)
 				{
 				o=json_object_new_object();
@@ -167,12 +177,14 @@ json_object *cfg_get(char *key)
 
 	do
 		{
+		json_object *jo=NULL;
 		char b;
 		while(*(c+end)!=0 && *(c+end)!='.')
 			end++;
 		b=c[end];
 		c[end]=0;
-		o=json_object_object_get(o, c);
+		json_object_object_get_ex(o, c, &jo);
+		o=jo;
 		c[end]=b;
 		c+=end+1;
 		end=0;
