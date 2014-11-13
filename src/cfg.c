@@ -47,13 +47,14 @@ int cfg_aggregate_file(const char *file, char *key, json_object *base)
 	int f;
 	json_object *o;
 	ssize_t s;
-	json_tokener *tok=json_tokener_new();
+	json_tokener *tok;
 	char buf[BUF_SIZE];
 	if(file==NULL)
 		return 1;
 	f=open(file, O_RDONLY);
 	if(f<0)
 		return 2;
+	tok=json_tokener_new();
 	do
 		{
 		s=read(f, buf, BUF_SIZE);
@@ -63,6 +64,7 @@ int cfg_aggregate_file(const char *file, char *key, json_object *base)
 		}
 	while(s>0);
 	close(f);
+	json_tokener_free(tok);
 	if(s<0)
 		return 3;
 	if(o==NULL) // TODO return json error?
