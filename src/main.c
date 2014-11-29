@@ -23,7 +23,7 @@ extern json_object *cfg;
 
 int main()
 	{
-	char *key="logger";
+	char *key="mserver.libdir";
 	cfg_init();
 	printf("%s\n", json_object_to_json_string_ext(cfg, JSON_C_TO_STRING_PRETTY));
 	json_object *o=cfg_get(key);

@@ -23,6 +23,9 @@
 /** init default configuration by loading file /etc/cfg and ~/.config/cfg  and all *.cfg under /etc/cfg.d/ */
 int cfg_init();
 
+/** clean up */
+void cfg_deinit();
+
 /** return NULL if we can't find a key */
 json_object *cfg_get(char *key);
 

@@ -37,7 +37,10 @@ void merge(json_object *dest, json_object *src)
 		json_object *o=NULL;
 		json_object_object_get_ex(dest, key, &o);
 		if(o==NULL || !json_object_is_type(val, json_type_object) || !json_object_is_type(o, json_type_object))
+			{
+			json_object_get(val);
 			json_object_object_add(dest, key, val);
+			}
 		else
 			merge(o, val);
 		}
@@ -69,12 +72,12 @@ int cfg_aggregate_file(const char *file, char *key, json_object *base)
 	json_tokener_free(tok);
 	if(s<0)
 		{
-		json_object_object_delete(o);
+		json_object_put(o);
 		return 3;
 		}
 	if(jerr != json_tokener_success) // TODO return json error?
 		{
-		json_object_object_delete(o);
+		json_object_put(o);
 		return 4;
 		}
 
@@ -92,6 +95,7 @@ int cfg_aggregate_file(const char *file, char *key, json_object *base)
 		base=jo;
 		}
 	merge(base, o);
+	json_object_put(o);
 
 	return 0;
 	}
@@ -148,9 +152,20 @@ void cfg_aggregate_dir(const char *name)
 	free(n);
 	}
 
+void cfg_deinit()
+	{
+	if(cfg!=NULL)
+		{
+		json_object_put(cfg);
+		cfg=NULL;
+		}
+	}
+
 int cfg_init()
 	{
 	char *home, *s;
+	if(cfg!=NULL)
+		return 1;
 	cfg=json_object_new_object();
 	cfg_aggregate_file("/etc/cfg", NULL, cfg);
 	cfg_aggregate_dir("/etc/cfg.d/");
