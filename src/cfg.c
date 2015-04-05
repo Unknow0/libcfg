@@ -186,14 +186,10 @@ int cfg_init(char **path)
 	if(cfg!=NULL)
 		return 1;
 	cfg=json_object_new_object();
-	if(path)
-		{
-		while(*(path++))
-			cfg_agregate(*path);
-		}
-	cfg_agregate("/etc/cfg");
-	cfg_aggregate("/etc/cfg.d/");
-	cfg_aggregate("~/.config/cfg");
+	if(!path)
+		path=DEFAULT_PATH;
+	while(*(path++))
+		cfg_agregate(*path);
 
 	return 0;
 	} 
