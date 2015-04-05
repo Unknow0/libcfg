@@ -21,7 +21,7 @@
 #include <json-c/json.h>
 
 /** init default configuration by loading file /etc/cfg and ~/.config/cfg  and all *.cfg under /etc/cfg.d/ */
-int cfg_init();
+int cfg_init(char **other_path);
 
 /** clean up */
 void cfg_deinit();

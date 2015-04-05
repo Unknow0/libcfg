@@ -161,24 +161,39 @@ void cfg_deinit()
 		}
 	}
 
-int cfg_init()
+int cfg_agregate(char *path)
 	{
-	char *home, *s;
+	char *home=getenv("HOME");
+	char *p=NULL;
+	size_t len=strlen(path);
+	printf("agregate '%s'\n", path);
+	if(path[0]=='~' && home)
+		{
+		len=strlen(home)+strlen(path)-1;
+		p=malloc(len+1);
+		strcpy(p, home);
+		strcpy(p, path+1);
+		path=p;
+		}
+	if(path[len]=='/')
+		cfg_agregate_dir(path);
+	else
+		cfg_agregate_file(path);
+	}
+
+int cfg_init(char **path)
+	{
 	if(cfg!=NULL)
 		return 1;
 	cfg=json_object_new_object();
-	cfg_aggregate_file("/etc/cfg", NULL, cfg);
-	cfg_aggregate_dir("/etc/cfg.d/");
-
-	home=getenv("HOME");
-	if(home!=NULL)
+	if(path)
 		{
-		s=malloc(strlen(home)+13);
-		strcpy(s, home);
-		strcat(s, "/.config/cfg");
-		cfg_aggregate_file(s, NULL, cfg);
-		free(s);
+		while(*(path++))
+			cfg_agregate(*path);
 		}
+	cfg_agregate("/etc/cfg");
+	cfg_aggregate("/etc/cfg.d/");
+	cfg_aggregate("~/.config/cfg");
 
 	return 0;
 	} 
