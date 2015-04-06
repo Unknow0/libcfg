@@ -3,6 +3,7 @@
 
 AC_PREREQ([2.69])
 AC_INIT([libcfg], [1.0])
+AC_CONFIG_AUX_DIR([tools])
 AC_CONFIG_SRCDIR([src/cfg.c])
 
 LT_INIT
@@ -14,9 +15,7 @@ AC_PROG_CC
 AC_PROG_INSTALL
 
 # Checks for libraries.
-AC_CHECK_LIB([container], [chunked_list_create], [], [
-	AC_MSG_ERROR([install container: https://github.com/Unknow0/libcontainer])
-	])
+PKG_CHECK_MODULES([DEPS], [container])
 AC_CHECK_LIB([json-c], [json_object_new_object], [], [
 	AC_MSG_ERROR([install json-c: https://github.com/json-c/json-c])
 	])
