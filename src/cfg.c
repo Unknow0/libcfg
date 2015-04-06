@@ -161,12 +161,12 @@ void cfg_deinit()
 		}
 	}
 
-int cfg_agregate(char *path)
+int cfg_aggregate(char *path)
 	{
 	char *home=getenv("HOME");
 	char *p=NULL;
 	size_t len=strlen(path);
-	printf("agregate '%s'\n", path);
+	printf("aggregate '%s'\n", path);
 	if(path[0]=='~' && home)
 		{
 		len=strlen(home)+strlen(path)-1;
@@ -176,9 +176,9 @@ int cfg_agregate(char *path)
 		path=p;
 		}
 	if(path[len]=='/')
-		cfg_agregate_dir(path);
+		cfg_aggregate_dir(path);
 	else
-		cfg_agregate_file(path);
+		cfg_aggregate_file(path, NULL, cfg);
 	}
 
 int cfg_init(char **path)
@@ -189,7 +189,7 @@ int cfg_init(char **path)
 	if(!path)
 		path=DEFAULT_PATH;
 	while(*(path++))
-		cfg_agregate(*path);
+		cfg_aggregate(*path);
 
 	return 0;
 	} 
