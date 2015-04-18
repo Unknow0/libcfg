@@ -166,7 +166,6 @@ int cfg_aggregate(char *path)
 	char *home=getenv("HOME");
 	char *p=NULL;
 	size_t len=strlen(path);
-	printf("aggregate '%s'\n", path);
 	if(path[0]=='~' && home)
 		{
 		len=strlen(home)+strlen(path)-1;
@@ -175,7 +174,7 @@ int cfg_aggregate(char *path)
 		strcpy(p, path+1);
 		path=p;
 		}
-	if(path[len]=='/')
+	if(path[len-1]=='/')
 		cfg_aggregate_dir(path);
 	else
 		cfg_aggregate_file(path, NULL, cfg);
