@@ -188,8 +188,11 @@ int cfg_init(char **path)
 	cfg=json_object_new_object();
 	if(!path)
 		path=DEFAULT_PATH;
-	while(*(path++))
+	while(*path)
+		{
 		cfg_aggregate(*path);
+		path++;
+		}
 
 	return 0;
 	} 
