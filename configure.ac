@@ -15,7 +15,7 @@ AC_PROG_CC
 AC_PROG_INSTALL
 
 # Checks for libraries.
-PKG_CHECK_MODULES([DEPS], [container])
+PKG_CHECK_MODULES([DEPS], [utils])
 AC_CHECK_LIB([json-c], [json_object_new_object], [], [
 	AC_MSG_ERROR([install json-c: https://github.com/json-c/json-c])
 	])

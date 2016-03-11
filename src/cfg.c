@@ -192,7 +192,6 @@ int cfg_init(char **path)
 		cfg_aggregate(*path);
 		path++;
 		}
-
 	return 0;
 	} 
 
