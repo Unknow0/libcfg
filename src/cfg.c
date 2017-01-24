@@ -28,6 +28,8 @@
 
 #define BUF_SIZE 1024
 
+char *DEFAULT_PATH[4]={"/etc/cfg", "/etc/cfg.d/", "~/.config/cfg", NULL};
+
 json_object *cfg=NULL;
 
 void merge(json_object *dest, json_object *src)
